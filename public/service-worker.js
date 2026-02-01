@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portal-web-cache-v17';
+const CACHE_NAME = 'portal-web-cache-v18';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log('PWA: Caching essential assets');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
@@ -22,6 +23,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
+            console.log('PWA: Clearing old cache', cacheName);
             return caches.delete(cacheName);
           }
         })
