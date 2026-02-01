@@ -1,1 +1,0 @@
-// Arquivo redirecionado para /public/service-worker.js via vercel.json
