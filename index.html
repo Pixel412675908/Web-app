@@ -89,14 +89,45 @@
 </head>
 <body>
     <div id="root"></div>
+    
+    <button id="installBtn" style="display:none; position:fixed; bottom:20px; right:20px; z-index:999; padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:50px; cursor:pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-weight: bold; font-family: 'Inter', sans-serif;">Instalar Aplicativo</button>
+
     <script>
+      // Registro do Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('PWA: Service Worker ativo via /public/.'))
+            .then(reg => console.log('PWA: Service Worker ativo.'))
             .catch(err => console.error('PWA: Falha no registro.', err));
         });
       }
+
+      // Lógica do Botão de Instalação
+      let deferredPrompt;
+      const installBtn = document.getElementById('installBtn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // O botão só aparece quando o PWA está validado e pronto para instalação
+        installBtn.style.display = 'block';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            installBtn.style.display = 'none';
+          }
+          deferredPrompt = null;
+        }
+      });
+
+      window.addEventListener('appinstalled', () => {
+        installBtn.style.display = 'none';
+        console.log('PWA: Aplicativo instalado com sucesso.');
+      });
     </script>
     <script type="module" src="./index.tsx"></script>
 </body>
