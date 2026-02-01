@@ -1,1 +1,0 @@
-// Arquivo movido para /public/service-worker.js

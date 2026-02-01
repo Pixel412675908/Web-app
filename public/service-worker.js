@@ -1,4 +1,3 @@
-
 const CACHE_NAME = 'portal-web-cache-v17';
 const ASSETS_TO_CACHE = [
   '/',
